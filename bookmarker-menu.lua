@@ -488,7 +488,7 @@ function makeBookmark(bname)
     local bookmark = {
       name = parseName(bname),
       pos = mp.get_property_number("time-pos"),
-      path = parsePath(mp.get_property("path")),
+      path = parsePath(mp.get_property("working-directory") .. "/" .. mp.get_property("path")),
       version = 2
     }
     return bookmark
