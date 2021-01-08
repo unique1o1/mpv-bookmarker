@@ -17,6 +17,8 @@ local confirmDelete = false
 local rate = 1.5
 -- The filename for the bookmarks file
 local bookmarkerName = "bookmarker.json"
+-- Use a bookmark table thats generated/used in the working directory instead of using a global table
+local localTable = false
 
 -- All the "global" variables and utilities; don't touch these
 local utils = require 'mp.utils'
@@ -264,8 +266,8 @@ end
 function getFilepath(filename)
   if isWindows() then
   	return os.getenv("APPDATA"):gsub("\\", "/") .. "/mpv/" .. filename
-  else	
-	return os.getenv("HOME") .. "/.config/mpv/" .. filename
+  else
+    return os.getenv("HOME") .. "/.config/mpv/" .. filename
   end
 end
 
@@ -426,7 +428,11 @@ end
 -- Also checks for bookmarks made by "mpv-bookmarker" and converts them
 -- Also removes anything it doesn't recognize as a bookmark
 function loadBookmarks()
-  bookmarks = loadTable(getFilepath(bookmarkerName))
+  if localTable then
+    bookmarks = loadTable(parsePath(mp.get_property("working-directory") .. "/" .. bookmarkerName))
+  else
+    bookmarks = loadTable(getFilepath(bookmarkerName))
+  end
   if bookmarks == nil then bookmarks = {} end
 
   local doSave = false
@@ -476,7 +482,11 @@ end
 
 -- Save the globally loaded bookmarks to the JSON file
 function saveBookmarks()
-  saveTable(bookmarks, getFilepath(bookmarkerName))
+  if localTable then
+    saveTable(bookmarks, parsePath(mp.get_property("working-directory") .. "/" .. bookmarkerName))
+  else
+    saveTable(bookmarks, getFilepath(bookmarkerName))
+  end
 end
 
 -- Make a bookmark of the current media file, position and name

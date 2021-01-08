@@ -48,6 +48,8 @@ local confirmDelete = false
 local rate = 1.5
 -- The filename for the bookmarks file
 local bookmarkerName = "bookmarker.json"
+-- Use a bookmark table thats generated/used in the working directory instead of using a global table
+local localTable = false
 ```
 
 It's recommended not to touch `bookmarkerName` but it's there to be changed in case you already have a file called `bookmarker.json` and don't want that to be overwritten, or to change it to `bookmarks.json` to convert bookmarks created by [mpv-bookmarker](https://github.com/nimatrueway/mpv-bookmark-lua-script).
@@ -107,7 +109,7 @@ For example, `Awesome moment @ %t` will show up as `Awesome moment @ 00:13:41.67
 
 ## Testing
 
-This has been tested on Windows. In theory, it should also work for Unix systems, but it hasn't been tested on those.
+This has been tested on Windows and some testing done on Linux.  In theory, it should also work for macOS, but it hasn't been tested on it.
 
 ## Changelog
 
