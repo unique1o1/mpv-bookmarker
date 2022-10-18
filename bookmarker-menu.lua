@@ -588,6 +588,18 @@ function quickLoad()
     end
 end
 
+function quickLoadPrev()
+    if not active then
+        loadBookmarks()
+        local slot = #bookmarks
+        if slot > 0 then mp.osd_message("Loaded bookmark at slot " .. slot) end
+        currentBookmark=currentBookmark-1
+        if currentBookmark <= 0 then
+            currentBookmark=slot
+        end
+        jumpToBookmark(currentBookmark)
+    end
+end
 -- Deletes the bookmark in the specified slot from the global table and then saves it
 function deleteBookmark(slot)
     table.remove(bookmarks, slot)
@@ -721,3 +733,4 @@ end
 mp.register_script_message("bookmarker-menu", handler)
 mp.register_script_message("bookmarker-quick-save", quickSave)
 mp.register_script_message("bookmarker-quick-load", quickLoad)
+mp.register_script_message("bookmarker-quick-load-prev", quickLoadPrev)
