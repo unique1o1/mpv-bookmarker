@@ -441,7 +441,12 @@ function loadBookmarks()
     local doReplace = false
     local ejects = {}
     local newmarks = {}
-    
+    table.sort(bookmarks,function(t1,t2)
+
+        return t1.pos<t2.pos
+    end
+    )
+
     for key, bookmark in pairs(bookmarks) do
         if type(key) == "number" then
             if bookmark.version == nil or bookmark.version == 1 then
