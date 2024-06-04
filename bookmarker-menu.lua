@@ -578,18 +578,45 @@ function quickSave()
         if slot > 0 then mp.osd_message("Saved new bookmark at slot " .. slot) end
     end
 end
+-- Sort bookmarks dynamically based on the current playback position
+function sortBookmarksByCurrentPos()
+    local currentPos = mp.get_property_number("time-pos", 0)
+    table.sort(bookbooks, function(a, b)
+        return math.abs(a.pos - currentPos) < math.abs(b.pos - currentPos)
+    end)
+end
+-- Sort bookmarks by their position
+local function sortBookmarksByPos()
+    table.sort(bookmarks, function(a, b)
+        return a.pos < b.pos
+    end)
+end
 
--- Quickly loads the last bookmark without bringing up the menu
 function quickLoad()
     if not active then
         loadBookmarks()
+        sortBookmarksByPos()
         local slot = #bookmarks
         if slot > 0 then mp.osd_message("Loaded bookmark at slot " .. slot) end
-        currentBookmark=currentBookmark+1
-        if currentBookmark > slot then
-            currentBookmark=1
+
+        local currentPos = mp.get_property_number("time-pos", 0)
+        for i, bookmark in ipairs(bookmarks) do
+            if bookmark.pos > currentPos then
+                currentBookmark = i
+                jumpToBookmark(currentBookmark)
+
+                mp.osd_message("Loaded next bookmark at slot " .. i)
+                break
+          
+            
+        elseif i==#bookmarks then
+                currentBookmark = 1
+                jumpToBookmark(currentBookmark)
+                mp.osd_message("Loaded first bookmark at slot " .. currentBookmark)
+                break
+            
         end
-        jumpToBookmark(currentBookmark)
+    end
     end
 end
 
