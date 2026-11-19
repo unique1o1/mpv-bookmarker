@@ -160,3 +160,17 @@ This has been tested on Windows and some testing done on Linux.  In theory, it s
 #### Version 1.0.0
 
 * Initial release
+
+## Fork changes
+
+* Bookmarks are stored per video in `~/.config/mpv/bookmarks/<filename>-bookmarker.json`. Create the `bookmarks` folder once: `mkdir -p ~/.config/mpv/bookmarks`.
+* Moving a video to another folder keeps its bookmarks working: saved paths are relinked to the file playing now (matched by file name, so renaming a file still loses them).
+* Quick-load next/previous jump relative to the current playback position:
+
+```
+ctrl+b script_message bookmarker-quick-save
+b script_message bookmarker-quick-load
+v script_message bookmarker-quick-load-prev
+```
+
+Run the tests with `lua tests/bookmarker-menu_test.lua`.
